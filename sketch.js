@@ -17,7 +17,7 @@ var DIFFISELECT = 2005;
 var JUMPTOO = 2008;
 var ASKK = 2010;
 
-var gameState = PLAY;
+var gameState = INTRO1;
 
 const Engine = Matter.Engine;
 const World = Matter.World;
@@ -33,7 +33,6 @@ var engine;
 var world;
 
 var database;
-var gameState = 0;
 var playerCount = 0;
 var allPlayers;
 
@@ -307,10 +306,6 @@ function setup()
   bgg.addImage(bgImg);
   bgg.visible = false;
 
-  jS = createButton('jss');
-  jS.position(width/2-405, height/2-290);
-  jS.show();
-
   finale = 0;
   p1d = 0;
 
@@ -333,7 +328,7 @@ function setup()
   rlls = [];
 
   //gameState defining.......
-  gameState = PLAY;  
+  gameState = INTRO1;  
 
   //demo pieces for gameState- RULES.......
   sDemo = createSprite(600,70*1);
@@ -1148,6 +1143,26 @@ function setup()
 
     joi = new Joyy();
     Matter.World.remove(world, joi.body);
+
+    ub = createButton('');
+    ub.size(40,40);
+
+    db = createButton('');
+    db.size(40,40);
+
+    rb = createButton('');
+    rb.size(40,40);
+
+    lb = createButton('');
+    lb.size(40,40);
+
+    fi = createButton('Fire');
+    //fi.style('background-color', "red");
+    fi.size(40,40);
+
+    mfi = createButton("Fire");
+    //mfi.style('background-color', "red");
+    mfi.size(40,40);
 }
 
 function draw()
@@ -1156,6 +1171,12 @@ function draw()
   Engine.update(engine);
   drawSprites();
 
+    ub.position(220,540);
+    db.position(220,630);
+    rb.position(175+940,585);
+    lb.position(265+940,585);
+    fi.position(220,585);
+    mfi.position(462+699,585);
   //jOffx = 500 + spr1.body.position.x;
   //jOffy = 100 + spr1.body.position.y;
 
@@ -2180,7 +2201,7 @@ function draw()
   var joy = mouseY-240 - jOffy+10;
   var disst = (Math.sqrt(((jox-spr1.body.position.x)*(jox-spr1.body.position.x))+((joy-spr1.body.position.y)*(joy-spr1.body.position.y))))
 
-  if(mouseIsPressed &&  disst < 200 && (mouseX-70 - jOffx+9)<spr1.body.position.x)
+  /*if(mouseIsPressed &&  disst < 200 && (mouseX-70 - jOffx+9)<spr1.body.position.x)
   {
     Matter.Body.applyForce(spr1.body, spr1.body.position, {x:-0.0008,y:0});
   }
@@ -2198,7 +2219,58 @@ function draw()
   if(mouseIsPressed &&  disst < 200 && (mouseY-240 - jOffy+10)>spr1.body.position.y)
   {
     Matter.Body.applyForce(spr1.body, spr1.body.position, {x:0,y:0.00006});
-  }
+  }*/
+
+  
+
+  lb.mousePressed(()=>{
+    Matter.Body.applyForce(spr1.body, spr1.body.position, {x:0.006,y:0});
+  });
+
+  rb.mousePressed(()=>{
+    Matter.Body.applyForce(spr1.body, spr1.body.position, {x:-0.006,y:0});
+  });
+
+  ub.mousePressed(()=>{
+    Matter.Body.applyForce(spr1.body, spr1.body.position, {x:0,y:-0.008});
+  });
+
+  db.mousePressed(()=>{
+    Matter.Body.applyForce(spr1.body, spr1.body.position, {x:0,y:0.00006});
+  });
+
+  fi.mousePressed(()=>{
+    bomB2 = new bomBS(spr1.body.position.x, spr1.body.position.y, 5);
+    bombs2.push(bomB2);
+    setTimeout(() => {bombs2.pop(bomB2);},1500);
+    dpoo = 1;
+    if(moo === "on" && moo !== "off")
+    {
+      bomb2Throw.play();
+    }
+  });
+
+  mfi.mousePressed(()=>{
+    bomB = new bomb(spr1.body.position.x, spr1.body.position.y, 5);
+    
+    if(dsjrd === 1)
+    {
+      bomB.throw(10,-3);
+    }
+   
+    if(dsjrd === 2)
+    {
+      bomB.throw(-10,-3);
+    } 
+  
+    bombs.push(bomB);
+    setTimeout(() => {bombs.pop(bomB);},1500);
+    if(moo === "on" && moo !== "off")
+    {
+      bombThrow.play();
+    }
+    dpoo = 1;
+  });
    
 
    push();
@@ -2210,7 +2282,7 @@ function draw()
    {
       stroke("green");
     }
-   line(mouseX-70 - jOffx+9 , mouseY-240 - jOffy+10, spr1.body.position.x, spr1.body.position.y);
+   //line(mouseX-70 - jOffx+9 , mouseY-240 - jOffy+10, spr1.body.position.x, spr1.body.position.y);
    //line(spr1.body.position.x,spr1.body.position.y, windo.body.position.x+100,windo.body.position.y);
    //rect(windo.body.position.x, windo.body.position.y,20,20)
    //line(spr1.body.position.x,spr1.body.position.y, windo.body.position.x,windo.body.position.y);
@@ -2322,7 +2394,7 @@ function draw()
      o2.velocity.x = -5;
      o1.velocity.x = -5;
      o3.velocity.x = -15;
-     o4.velocity.x = -5
+     o4.velocity.x = -5;
      o1v.velocity.y = -6;
      o2v.velocity.y = -14;
    }
@@ -2997,7 +3069,7 @@ function draw()
 
   if(keyWentDown(32))
   {
-    var bomB = new bomb(spr1.body.position.x, spr1.body.position.y, 5);
+     bomB = new bomb(spr1.body.position.x, spr1.body.position.y, 5);
     
     if(dsjrd === 1)
     {
@@ -3010,7 +3082,7 @@ function draw()
     } 
   
     bombs.push(bomB);
-    //setTimeout(() => {bombs.pop(bomB);},1500);
+    setTimeout(() => {bombs.pop(bomB);},1500);
     if(moo === "on" && moo !== "off")
     {
       bombThrow.play();
@@ -3020,9 +3092,9 @@ function draw()
   
   if(keyWentDown(DOWN_ARROW))
   {
-    var bomB2 = new bomBS(spr1.body.position.x, spr1.body.position.y, 5);
+    bomB2 = new bomBS(spr1.body.position.x, spr1.body.position.y, 5);
     bombs2.push(bomB2);
-    //setTimeout(() => {bombs2.pop(bomB2);},1500);
+    setTimeout(() => {bombs2.pop(bomB2);},1500);
     dpoo = 1;
     if(moo === "on" && moo !== "off")
     {
