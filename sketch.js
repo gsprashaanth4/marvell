@@ -328,7 +328,7 @@ function setup()
   rlls = [];
 
   //gameState defining.......
-  gameState = INTRO1;  
+  gameState = PLAY;  
 
   //demo pieces for gameState- RULES.......
   sDemo = createSprite(600,70*1);
@@ -1141,8 +1141,24 @@ function setup()
     windo = new Windo();
     Matter.World.remove(world, windo.body);
 
-    joi = new Joyy();
-    Matter.World.remove(world, joi.body);
+    //joi = new Joyy();
+    jois = createSlider(-10, 10, 0, 2);
+    jois.position(180,640);
+    jois.style("height", "4px");
+
+    joiu = createSlider(-10, 10, 0, 2);
+    joiu.position(1120,600);
+    joiu.style("transform", "rotate(-90deg)");
+    joiu.style("height", "4px");
+
+    //Matter.World.remove(world, joi.body);
+/*
+    jsb = createButton('');
+    jsb.size(140,140);
+
+    jss = createButton('');
+    jss.style('background-color', "grey");
+    jss.size(30,30);
 
     ub = createButton('');
     ub.size(40,40);
@@ -1154,15 +1170,17 @@ function setup()
     rb.size(40,40);
 
     lb = createButton('');
-    lb.size(40,40);
+    lb.size(40,40);*/
 
     fi = createButton('Fire');
-    //fi.style('background-color', "red");
+    fi.style('background-color', "rgb(235, 95, 52)");
     fi.size(40,40);
 
     mfi = createButton("Fire");
-    //mfi.style('background-color', "red");
+    mfi.style('background-color', "rgb(52, 225, 235)");
     mfi.size(40,40);
+
+    
 }
 
 function draw()
@@ -1171,14 +1189,25 @@ function draw()
   Engine.update(engine);
   drawSprites();
 
-    ub.position(220,540);
-    db.position(220,630);
-    rb.position(175+940,585);
-    lb.position(265+940,585);
-    fi.position(220,585);
-    mfi.position(462+699,585);
+    //jsb.position(190,530);
+    //jss.position(245, 580);
+    //ub.position(220,540);
+    //db.position(220,630);
+    //rb.position(175+940,585);
+    //lb.position(265+940,585);
+    fi.position(228,585);
+    mfi.position(462+740,585);
   //jOffx = 500 + spr1.body.position.x;
   //jOffy = 100 + spr1.body.position.y;
+
+  /*
+  if(mouseIsPressed && (mouseX) > (jss.position.x-15) && (mouseY) < (jss.position.y+15))
+  {
+    jss.position(mouseX,mouseY);
+  }else
+  {
+    jss.position(245,580);
+  }*/
 
   //jOff = Math.sqrt(((500-spr1.body.position.x)*(500-spr1.body.position.x))+((100-spr1.body.position.y)*(100-spr1.body.position.y)))
   jOffx = 500 - spr1.body.position.x;
@@ -2165,6 +2194,11 @@ function draw()
    v14.display();
    v15.display();
 
+   if(p1d !== 1)
+   {
+      p1.display();
+   }else if(p1d === 1){}
+
    windo.display();   
 
    //joi.display();
@@ -2172,6 +2206,9 @@ function draw()
    windo.body.position.x = spr1.body.position.x;
    windo.body.position.y = spr1.body.position.y;
 
+   Matter.Body.applyForce(spr1.body, spr1.body.position, {x : (jois.value())/9000  ,  y : -1*(joiu.value())/4000 });
+
+   /*
    if(mouseIsPressed && (mouseX-70)>joi.body.position.x-10 && (mouseX-70)<joi.body.position.x+10)
    {
       joi.body.position.x = mouseX-70 - jOffx*0.2;
@@ -2179,7 +2216,7 @@ function draw()
    }else{
       joi.body.position.x = windo.body.position.x-350;
       joi.body.position.y = windo.body.position.y+300;
-   }
+   }*/
 
   //joi.display();
 
@@ -2187,8 +2224,8 @@ function draw()
   textSize(20);
   strokeWeight(2);
   fill("white");
-  text(Math.round(jOffx),200,200);
-  text(Math.round(jOffy),200,300);
+  text(Math.round(joiu.value()),200,200);
+  text(Math.round(jois.value()),200,300);
   pop();
    
   //if(mouseIsPressed && (mouseX-70)>windo.body.position.x-10 && (mouseX-70)<windo.body.position.x+10)
@@ -2220,24 +2257,6 @@ function draw()
   {
     Matter.Body.applyForce(spr1.body, spr1.body.position, {x:0,y:0.00006});
   }*/
-
-  
-
-  lb.mousePressed(()=>{
-    Matter.Body.applyForce(spr1.body, spr1.body.position, {x:0.006,y:0});
-  });
-
-  rb.mousePressed(()=>{
-    Matter.Body.applyForce(spr1.body, spr1.body.position, {x:-0.006,y:0});
-  });
-
-  ub.mousePressed(()=>{
-    Matter.Body.applyForce(spr1.body, spr1.body.position, {x:0,y:-0.008});
-  });
-
-  db.mousePressed(()=>{
-    Matter.Body.applyForce(spr1.body, spr1.body.position, {x:0,y:0.00006});
-  });
 
   fi.mousePressed(()=>{
     bomB2 = new bomBS(spr1.body.position.x, spr1.body.position.y, 5);
@@ -2373,10 +2392,7 @@ function draw()
    }else if(difficulty === "hard" || difficulty === "medium")
    {}
   
-   if(p1d !== 1)
-   {
-      p1.display();
-   }else if(p1d === 1){}
+   
   
    spr1.display();
   
